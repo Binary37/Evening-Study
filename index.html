@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PWA Push Test</title>
+    <!-- 引入 Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.x/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.x/firebase-messaging-compat.js"></script>
+</head>
+<body>
+    <h1>PWA 推播測試</h1>
+    <button onclick="askPermission()">開啟通知權限</button>
+    <p>您的 Token (請複製此段到 Firebase 測試):</p>
+    <textarea id="tokenDisplay" style="width:100%; height:100px;"></textarea>
+
+    <script>
+        // 1. 貼上你的 Firebase Configconst firebaseConfig = {
+  apiKey: "AIzaSyBZQbpNRvZ3LeJlVSFL0KPdbVu-gwJiFqg",
+  authDomain: "evening-study-notification.firebaseapp.com",
+  projectId: "evening-study-notification",
+  storageBucket: "evening-study-notification.firebasestorage.app",
+  messagingSenderId: "303625333280",
+  appId: "1:303625333280:web:763eb2a56b8be64bd4ea45",
+  measurementId: "G-90DGDB9KQH"
+};
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        // 2. 要求權限並取得 Token
+        function askPermission() {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    // 填入你的 VAPID Key
+                    messaging.getToken({ vapidKey: 'BF09n2UW6rkGl5_W0_NoHR0yoYOw_9o7Dz1IrTYZfvxov9l0r3rP8glKOVZo-bQxqFxKCQN66-6ZJ71gJqEabjY' })
+                    .then((currentToken) => {
+                        if (currentToken) {
+                            document.getElementById('tokenDisplay').value = currentToken;
+                            console.log("Token 取得成功！");
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
